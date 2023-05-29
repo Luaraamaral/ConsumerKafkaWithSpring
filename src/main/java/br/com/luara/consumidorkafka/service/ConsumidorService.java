@@ -19,7 +19,7 @@ public class ConsumidorService {
     private ConsumidorRepository consumidorRepository;
 
     @KafkaListener(topics = "SalvarPedido", groupId = "MicrosservicoSalvaPedido")
-    private void executar(ConsumerRecord<String, String> record) {
+    private void salvarPedido(ConsumerRecord<String, String> record) {
 
         log.info("Chave = {} ", record.key());
         log.info("Cabeçalho = {} ", record.headers());
