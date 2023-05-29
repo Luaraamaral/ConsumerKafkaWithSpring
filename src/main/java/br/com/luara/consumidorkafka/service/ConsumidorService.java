@@ -1,6 +1,6 @@
 package br.com.luara.consumidorkafka.service;
 
-import br.com.luara.consumidorkafka.model.Pedido;
+import br.com.luara.consumidorkafka.entity.Pedido;
 import br.com.luara.consumidorkafka.repository.ConsumidorRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 
@@ -15,6 +16,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class ConsumidorService {
 
+    @Autowired
+    private KafkaTemplate<String, String> kafkaTemplate;
     @Autowired
     private ConsumidorRepository consumidorRepository;
 
@@ -49,11 +52,13 @@ public class ConsumidorService {
             return;
         }
 
-
         log.info("Evento recebido = {} ", pedido);
         try {
-        salvarNoBancoDeDados(pedido);
-        log.info("Evento salvo no banco de dados!");
+            salvarNoBancoDeDados(pedido);
+            log.info("Evento salvo no banco de dados!");
+
+            String mensagem = "Pedido salvo no banco de dados: " + pedido.getCodigo();
+            kafkaTemplate.send("PedidoSalvo", mensagem);
         } catch (Exception e) {
             log.error("Não foi possível salvar o evento no banco de dados!");
         }
@@ -62,4 +67,5 @@ public class ConsumidorService {
     private void salvarNoBancoDeDados(Pedido pedido) {
         consumidorRepository.save(pedido);
     }
+
 }

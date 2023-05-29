@@ -1,4 +1,4 @@
-package br.com.luara.consumidorkafka.model;
+package br.com.luara.consumidorkafka.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

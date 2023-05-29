@@ -1,6 +1,6 @@
 package br.com.luara.consumidorkafka.repository;
 
-import br.com.luara.consumidorkafka.model.Pedido;
+import br.com.luara.consumidorkafka.entity.Pedido;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
